@@ -1,10 +1,18 @@
 import React from 'react'
-import Home from "./component/Home"
+import {Routes,Route } from 'react-router-dom';
+import Home from "./component/Home";
+import Form from './component/Form';
+
 
 const App = () => {
   return (
    <>
-   <Home/>
+      <Routes>
+      <Route exact path="/" element={<Home/>} /> 
+      <Route exact path="/form" element={<Form/>} /> 
+
+      </Routes>
+  
    </>
   )
 }
