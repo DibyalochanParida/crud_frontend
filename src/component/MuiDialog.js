@@ -35,6 +35,7 @@ export default function MuiDialog({ openFilter, setOpenFilter, setFilterData, de
   }
   const handleDelete = () => {
     dispatch(deleteUsers({ id: deleteItem }));
+    window.location.reload();
   }
 
   return (

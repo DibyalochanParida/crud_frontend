@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const patchUsers = createAsyncThunk(
-  "/userspatch",
+export const putStatus = createAsyncThunk(
+  "/usersput",
   async ({id},thunkAPI) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_PATH}/userspatch/${id}`,
+      const response = await fetch(`${process.env.REACT_APP_API_PATH}/usersput/${id}`,
         {
-          method: "PATCH",
+          method: "PUT",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -29,38 +29,38 @@ export const patchUsers = createAsyncThunk(
 );
 
 
-export const patchUsersSlice = createSlice({
-  name: "userspatch",
+export const putStatusSlice = createSlice({
+  name: "usersput",
   initialState: {
-    patchFetching: false,
-    patchSuccess: false,
-    patchError: false,
+    putStatusFetching: false,
+    putStatusSuccess: false,
+    putStatusError: false,
     errorMessage: "",
   },
   reducers: {
-    patchUsersclearState: (state) => {
-      state.patchError = false;
-      state.patchSuccess = false;
-      state.patchFetching = false;
+    putStatusclearState: (state) => {
+      state.putStatusError = false;
+      state.putStatusSuccess = false;
+      state.putStatusFetching = false;
       return state;
     },
   },
   extraReducers: {
-    [patchUsers.fulfilled]: (state, { payload }) => {
-      state.patchFetching = false;
-      state.patchSuccess = true;
-      state.patchError = false;
+    [putStatus.fulfilled]: (state, { payload }) => {
+      state.putStatusFetching = false;
+      state.putStatusSuccess = true;
+      state.putStatusError = false;
     },
-    [patchUsers.pending]: (state) => {
-      state.patchFetching = true;
+    [putStatus.pending]: (state) => {
+      state.putStatusFetching = true;
     },
-    [patchUsers.rejected]: (state, { payload }) => {
-      state.patchFetching = false;
-      state.patchError = true;
-      state.patchSuccess = false;
+    [putStatus.rejected]: (state, { payload }) => {
+      state.putStatusFetching = false;
+      state.putStatusError = true;
+      state.putStatusSuccess = false;
       state.errorMessage = payload.message;
     },
   },
 })
 
-export const { patchUsersclearState } = patchUsersSlice.actions;
+export const { putStatusclearState } = putStatusSlice.actions;
