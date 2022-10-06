@@ -3,7 +3,7 @@ import {getUsersSlice} from "./usersReducer/getUsers.js";
 import {postUsersSlice} from "./usersReducer/postUsers";
 import {deleteUsersSlice} from "./usersReducer/deleteUsers";
 import {putUsersSlice} from "./usersReducer/editUsers";
-import {patchUsersSlice} from "./usersReducer/userStatus"
+import {putStatusSlice} from "./usersReducer/userStatus"
 
 
 export const reducer = combineReducers({ 
@@ -11,6 +11,6 @@ export const reducer = combineReducers({
     postUsersSlice:postUsersSlice.reducer,
     deleteUsersSlice:deleteUsersSlice.reducer,
     putUsersSlice:putUsersSlice.reducer,
-    patchUsersSlice:patchUsersSlice.reducer,
+    putStatusSlice:putStatusSlice.reducer,
 
 })

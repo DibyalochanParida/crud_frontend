@@ -26,7 +26,7 @@ import { getUsers, getUsersclearState } from "../store/reducers/usersReducer/get
 import { postUsersclearState } from "../store/reducers/usersReducer/postUsers";
 import { putUsersclearState, putUsers } from "../store/reducers/usersReducer/editUsers";
 import { deleteUsersclearState } from "../store/reducers/usersReducer/deleteUsers";
-import { patchUsers, patchUsersclearState } from "../store/reducers/usersReducer/userStatus";
+import { putStatus, putStatusclearState } from "../store/reducers/usersReducer/userStatus";
 
 
 
@@ -35,7 +35,7 @@ const Home = () => {
   const { postSuccess, postFetching, postError } = useSelector((state) => state.postUsersSlice);
   const { deleteSuccess } = useSelector((state) => state.deleteUsersSlice);
   const { putSuccess, putFetching, putError } = useSelector((state) => state.putUsersSlice);
-  const { patchSuccess, patchFetching, patchError } = useSelector((state) => state.patchUsersSlice);
+  const { putStatusSuccess,putStatusFetching, putStatusError} = useSelector((state) => state.putStatusSlice);
   const dispatch = useDispatch()
   const [allData, setAllData] = React.useState([])
   const [openFilter, setOpenFilter] = React.useState(false)
@@ -58,7 +58,8 @@ const Home = () => {
       phone: yup.string().required("Enter phone no"),
     }),
     onSubmit: (values, { resetForm }) => {
-      dispatch(putUsers({ values, id: editState }))
+      dispatch(putUsers({ values, id: editState }));
+      window.location.reload();
     },
   });
 
@@ -113,7 +114,7 @@ const Home = () => {
       dispatch(putUsersclearState());
       dispatch(getUsers());
     }
-    if (patchSuccess) {
+    if (putStatusSuccess) {
       toast.success('Status Completed', {
         position: "bottom-left",
         autoClose: 3000,
@@ -125,7 +126,7 @@ const Home = () => {
       });
       setEditState(null)
       dispatch(getUsers());
-      dispatch(patchUsersclearState());
+      dispatch(putStatusclearState());
     }
     if (filterData !== null) {
       if (filterData.length === 1 && filterData[0] !== "all") {
@@ -138,7 +139,7 @@ const Home = () => {
         setAllData(usersdata)
       }
     }
-  }, [isSuccess, dispatch, usersdata, postSuccess, deleteSuccess, putSuccess, patchSuccess, filterData])
+  }, [isSuccess, dispatch, usersdata, postSuccess, deleteSuccess, putSuccess, putStatusSuccess, filterData])
 
   // onClick for filter item
   const onClickFilter = () => {
@@ -147,7 +148,7 @@ const Home = () => {
 
   // onClick for Delete item
   const deleteOnclick = (id) => {
-    setDeleteItem(id)
+    setDeleteItem(id);
     setOpenDelete(true)
   }
 
@@ -166,7 +167,8 @@ const Home = () => {
 
   // onClick for table status
   const statusOnclick = (id) => {
-    dispatch(patchUsers({ id: id }))
+    dispatch(putStatus({ id: id }));
+    window.location.reload();
   }
 
   // onClickAway for ClickAwayListener of mui
@@ -295,7 +297,11 @@ const Home = () => {
                                       {
                                         editState !== ele.id ?
                                           <Box>
+                                            {ele.status !== null ?
+                                            <Button variant="outlined" sx={{ mr: 1 }} disabled>Edit</Button>
+                                            :
                                             <Button variant="outlined" sx={{ mr: 1 }} color="success" onClick={() => editOnclick(ele)}>Edit</Button>
+                                            }
                                             <Button variant="outlined" color="error" onClick={() => deleteOnclick(ele.id)}>Delete</Button>
                                           </Box>
                                           :

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const putUsers = createAsyncThunk(
-  "/usersput",
+  "/",
   async ({values,id},thunkAPI) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_PATH}/usersput/${id}`,
