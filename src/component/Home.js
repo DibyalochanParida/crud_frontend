@@ -59,7 +59,6 @@ const Home = () => {
     }),
     onSubmit: (values, { resetForm }) => {
       dispatch(putUsers({ values, id: editState }));
-      window.location.reload();
     },
   });
 
@@ -168,7 +167,6 @@ const Home = () => {
   // onClick for table status
   const statusOnclick = (id) => {
     dispatch(putStatus({ id: id }));
-    window.location.reload();
   }
 
   // onClickAway for ClickAwayListener of mui
