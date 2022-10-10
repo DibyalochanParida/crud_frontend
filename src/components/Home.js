@@ -15,7 +15,6 @@ import MuiDialog from "./MuiDialog";
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik';
@@ -31,11 +30,11 @@ import { putStatus, putStatusclearState } from "../store/reducers/usersReducer/u
 
 
 const Home = () => {
-  const { usersdata, isSuccess, isFetching, isError } = useSelector((state) => state.getUsersSlice);
-  const { postSuccess, postFetching, postError } = useSelector((state) => state.postUsersSlice);
+  const { usersdata, isSuccess } = useSelector((state) => state.getUsersSlice);
+  const { postSuccess } = useSelector((state) => state.postUsersSlice);
   const { deleteSuccess } = useSelector((state) => state.deleteUsersSlice);
-  const { putSuccess, putFetching, putError } = useSelector((state) => state.putUsersSlice);
-  const { putStatusSuccess,putStatusFetching, putStatusError} = useSelector((state) => state.putStatusSlice);
+  const { putSuccess } = useSelector((state) => state.putUsersSlice);
+  const { putStatusSuccess } = useSelector((state) => state.putStatusSlice);
   const dispatch = useDispatch()
   const [allData, setAllData] = React.useState([])
   const [openFilter, setOpenFilter] = React.useState(false)
@@ -62,19 +61,19 @@ const Home = () => {
     },
   });
 
-// useEffect for call users data
+  // useEffect for call users data
   React.useEffect(() => {
     dispatch(getUsers());
-  }, [])
+  }, [dispatch])
 
-// useEffect for server response
+  // useEffect for server response
   React.useEffect(() => {
     if (isSuccess) {
       setAllData(usersdata)
       dispatch(getUsersclearState());
     }
     if (postSuccess) {
-      toast.success('successfully Added', {
+      toast.success('Sucessfully Updated', {
         position: "bottom-left",
         autoClose: 3000,
         hideProgressBar: false,
@@ -87,7 +86,7 @@ const Home = () => {
       dispatch(postUsersclearState());
     }
     if (deleteSuccess) {
-      toast.error('🦄 successfully Deleted', {
+      toast.error("successfully Deleted", {
         position: "bottom-left",
         autoClose: 3000,
         hideProgressBar: false,
@@ -176,151 +175,155 @@ const Home = () => {
 
   return (
     <>
-            <Container maxWidth="lg" sx={{ mt: 10 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
-                  <Link to="/form" style={{ textDecoration: "none" }}>
-                    <Button variant="contained" size="large" type="submit" color="success">
-                      Add
-                    </Button>
-                  </Link>
-                </Grid>
-                <Grid item xs={12}>
-                  <Paper sx={{ width: "100%", overflow: "hidden" }}>
-                    <TableContainer sx={{ maxHeight: 520 }}>
-                      <form onSubmit={formik.handleSubmit} >
-                        <Table stickyHeader aria-label="sticky table">
-                          <TableHead>
-                            <TableRow>
-                              <TableCell
-                                sx={{ minWidth: 100 }}
-                              >
-                                <Typography>
-                                  Name
-                                </Typography>
+      <Container maxWidth="lg" sx={{ mt: 10 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Typography variant="h5">
+              Users Details
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
+            <Link to="/form" style={{ textDecoration: "none" }}>
+              <Button variant="contained" size="large" type="submit" color="success">
+                Add
+              </Button>
+            </Link>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper sx={{ width: "100%", overflow: "hidden" }}>
+              <TableContainer sx={{ maxHeight: 500 }}>
+                <form onSubmit={formik.handleSubmit} >
+                  <Table stickyHeader aria-label="sticky table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell
+                          sx={{ minWidth: 100 }}
+                        >
+                          <Typography>
+                            Name
+                          </Typography>
+                        </TableCell>
+                        <TableCell
+                          sx={{ minWidth: 100 }}
+                        >
+                          <Typography>
+                            Email
+                          </Typography>
+                        </TableCell>
+                        <TableCell
+                          sx={{ minWidth: 100 }}
+                        >
+                          <Typography>
+                            Phone
+                          </Typography>
+                        </TableCell>
+                        <TableCell
+                          sx={{ minWidth: 100 }}
+                        >
+                          <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <FilterListIcon onClick={onClickFilter} sx={{ mr: 1 }} />
+                            <Typography>
+                              Status
+                            </Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell
+                          sx={{ minWidth: 100 }}
+                        >
+                          <Typography>
+                            Action
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <ClickAwayListener onClickAway={outSideClick}>
+                      <TableBody>
+                        {allData.map((ele) => {
+                          return (
+                            <TableRow hover key={ele.id}>
+                              <TableCell>
+                                {
+                                  editState !== ele.id || editState === null ?
+                                    ele.name :
+
+                                    <TextField
+                                      placeholder="Enter phone name"
+                                      fullWidth
+                                      name="name"
+                                      value={formik.values.name}
+                                      onChange={formik.handleChange}
+                                      error={formik.touched.name && Boolean(formik.errors.name)}
+                                      helperText={formik.touched.name && formik.errors.name}
+                                      variant="standard" />
+                                }
                               </TableCell>
-                              <TableCell
-                                sx={{ minWidth: 100 }}
-                              >
-                                <Typography>
-                                  Email
-                                </Typography>
+                              <TableCell>
+                                {
+                                  editState !== ele.id ?
+                                    ele.email :
+                                    <TextField
+                                      placeholder="Enter phone email"
+                                      fullWidth
+                                      name="email"
+                                      value={formik.values.email}
+                                      onChange={formik.handleChange}
+                                      error={formik.touched.email && Boolean(formik.errors.email)}
+                                      helperText={formik.touched.email && formik.errors.email}
+                                      variant="standard" />
+                                }
                               </TableCell>
-                              <TableCell
-                                sx={{ minWidth: 100 }}
-                              >
-                                <Typography>
-                                  Phone
-                                </Typography>
+                              <TableCell>
+                                {
+                                  editState !== ele.id ?
+                                    ele.phone :
+                                    <TextField
+                                      placeholder="Enter phone number"
+                                      fullWidth
+                                      type="text"
+                                      name="phone"
+                                      value={formik.values.phone}
+                                      onChange={formik.handleChange}
+                                      error={formik.touched.phone && Boolean(formik.errors.phone)}
+                                      helperText={formik.touched.phone && formik.errors.phone}
+                                      variant="standard" />
+                                }
                               </TableCell>
-                              <TableCell
-                                sx={{ minWidth: 100 }}
-                              >
-                                <Box sx={{ display: "flex", alignItems: "center" }}>
-                                  <FilterListIcon onClick={onClickFilter} sx={{ mr: 1 }} />
-                                  <Typography>
-                                    Status
-                                  </Typography>
-                                </Box>
+                              <TableCell>
+                                {ele.status !== null ?
+                                  <Button variant="contained" disabled>completed</Button>
+                                  :
+                                  <Button variant="contained" color="success" onClick={() => statusOnclick(ele.id)}>complete</Button>
+                                }
                               </TableCell>
-                              <TableCell
-                                sx={{ minWidth: 100 }}
-                              >
-                                <Typography>
-                                  Action
-                                </Typography>
+                              <TableCell>
+                                {
+                                  editState !== ele.id ?
+                                    <Box>
+                                      {ele.status !== null ?
+                                        <Button variant="outlined" sx={{ mr: 1 }} disabled>Edit</Button>
+                                        :
+                                        <Button variant="outlined" sx={{ mr: 1 }} color="success" onClick={() => editOnclick(ele)}>Edit</Button>
+                                      }
+                                      <Button variant="outlined" color="error" onClick={() => deleteOnclick(ele.id)}>Delete</Button>
+                                    </Box>
+                                    :
+                                    <Button variant="contained" type="submit" color="success">Update</Button>
+                                }
                               </TableCell>
                             </TableRow>
-                          </TableHead>
-                          <ClickAwayListener onClickAway={outSideClick}>
-                            <TableBody>
-                              {allData.map((ele) => {
-                                return (
-                                  <TableRow hover key={ele.id}>
-                                    <TableCell>
-                                      {
-                                        editState !== ele.id || editState === null ?
-                                          ele.name :
-
-                                          <TextField
-                                            placeholder="Enter phone name"
-                                            fullWidth
-                                            name="name"
-                                            value={formik.values.name}
-                                            onChange={formik.handleChange}
-                                            error={formik.touched.name && Boolean(formik.errors.name)}
-                                            helperText={formik.touched.name && formik.errors.name}
-                                            variant="standard" />
-                                      }
-                                    </TableCell>
-                                    <TableCell>
-                                      {
-                                        editState !== ele.id ?
-                                          ele.email :
-                                          <TextField
-                                            placeholder="Enter phone email"
-                                            fullWidth
-                                            name="email"
-                                            value={formik.values.email}
-                                            onChange={formik.handleChange}
-                                            error={formik.touched.email && Boolean(formik.errors.email)}
-                                            helperText={formik.touched.email && formik.errors.email}
-                                            variant="standard" />
-                                      }
-                                    </TableCell>
-                                    <TableCell>
-                                      {
-                                        editState !== ele.id ?
-                                          ele.phone :
-                                          <TextField
-                                            placeholder="Enter phone number"
-                                            fullWidth
-                                            type="number"
-                                            name="phone"
-                                            value={formik.values.phone}
-                                            onChange={formik.handleChange}
-                                            error={formik.touched.phone && Boolean(formik.errors.phone)}
-                                            helperText={formik.touched.phone && formik.errors.phone}
-                                            variant="standard" />
-                                      }
-                                    </TableCell>
-                                    <TableCell>
-                                      {ele.status !== null ?
-                                        <Button variant="contained" disabled>completed</Button>
-                                        :
-                                        <Button variant="contained" color="success" onClick={() => statusOnclick(ele.id)}>completed</Button>
-                                      }
-                                    </TableCell>
-                                    <TableCell>
-                                      {
-                                        editState !== ele.id ?
-                                          <Box>
-                                            {ele.status !== null ?
-                                            <Button variant="outlined" sx={{ mr: 1 }} disabled>Edit</Button>
-                                            :
-                                            <Button variant="outlined" sx={{ mr: 1 }} color="success" onClick={() => editOnclick(ele)}>Edit</Button>
-                                            }
-                                            <Button variant="outlined" color="error" onClick={() => deleteOnclick(ele.id)}>Delete</Button>
-                                          </Box>
-                                          :
-                                          <Button variant="contained" type="submit" color="success">Update</Button>
-                                      }
-                                    </TableCell>
-                                  </TableRow>
-
-                                );
-                              })}
-                            </TableBody>
-                          </ClickAwayListener>
-                        </Table>
-                      </form>
-                    </TableContainer>
-                  </Paper>
-                </Grid>
-              </Grid>
-            </Container>
-            < MuiDialog openFilter={openFilter} setOpenFilter={setOpenFilter} filterData={filterData} setFilterData={setFilterData} deleteItem={deleteItem} openDelete={openDelete} setOpenDelete={setOpenDelete} />
-            <ToastContainer />
+                          );
+                        })}
+                      </TableBody>
+                    </ClickAwayListener>
+                  </Table>
+                </form>
+              </TableContainer>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
+      < MuiDialog openFilter={openFilter} setOpenFilter={setOpenFilter} filterData={filterData} setFilterData={setFilterData} deleteItem={deleteItem} openDelete={openDelete} setOpenDelete={setOpenDelete} />
+      <ToastContainer />
     </>
   );
 }

@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { postUsers } from "../store/reducers/usersReducer/postUsers";
 import { useNavigate } from "react-router-dom";
 import Typography from '@mui/material/Typography';
-
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -54,7 +53,7 @@ const Form = () => {
         progress: undefined,
       });
     }
-  }, [postSuccess])
+  }, [postSuccess,postError,navigate])
   return (
     <>
       <Container maxWidth="sm" sx={{ mt: 10 }}>
@@ -62,7 +61,7 @@ const Form = () => {
           <Grid container spacing={3}>
             <Grid item xs={12} sx={{display:"flex",justifyContent:"center",alignItems:"center"}}>
               <Typography  variant="h5">
-                Submit Form
+              Add detils Form
               </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -93,7 +92,7 @@ const Form = () => {
               <TextField id="outlined-basic"
                 placeholder="Enter phone number"
                 fullWidth label="Phone"
-                type="number"
+                type="text"
                 name="phone"
                 value={formik.values.phone}
                 onChange={formik.handleChange}

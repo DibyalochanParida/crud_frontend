@@ -12,27 +12,34 @@ import { useSelector, useDispatch } from 'react-redux';
 
 
 export default function MuiDialog({ openFilter, setOpenFilter, setFilterData, deleteItem, openDelete, setOpenDelete }) {
-  const { deleteFetching, deleteSuccess, deleteError } = useSelector((state) => state.deleteUsersSlice);
+  const {deleteSuccess} = useSelector((state) => state.deleteUsersSlice);
   const dispatch = useDispatch()
   const selected = [];
 
+  // useEffect for server response
   React.useEffect(() => {
     if (deleteSuccess) {
       setOpenDelete(false)
     }
-  }, [deleteSuccess])
+  }, [deleteSuccess,setOpenDelete])
   
+   // onClick for close dialog
   const handleClose = () => {
     setOpenFilter(false);
   };
+
+  // onClick for selected items
   const handleSelected = () => {
     setFilterData(selected)
     setOpenFilter(false);
   }
 
+  // onClick for close delete dialog
   const handleCloseDelete = () => {
     setOpenDelete(false)
   }
+
+  // onClick for delete item
   const handleDelete = () => {
     dispatch(deleteUsers({ id: deleteItem }));
   }
@@ -40,7 +47,7 @@ export default function MuiDialog({ openFilter, setOpenFilter, setFilterData, de
   return (
     <>
       {/* dialog for Delete */}
-      <Dialog disableEscapeKeyDown open={openDelete} onClose={handleCloseDelete}>
+      <Dialog disableEscapeKeyDown  open={openDelete} onClose={handleCloseDelete}>
         <DialogContent>
           Are you sure you want to delete this item?
         </DialogContent>
